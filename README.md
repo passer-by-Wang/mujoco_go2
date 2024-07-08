@@ -33,4 +33,5 @@
 
 ## 6.参考文献和资源 📖
 bitbot框架：[访问 bitbot 文档](https://bitbot.lmy.name/docs/intro/)
+
 MuJoCo 模拟器：[了解 MuJoCo](https://mujoco.readthedocs.io/en/stable/overview.html)
