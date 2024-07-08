@@ -1,0 +1,88 @@
+{
+  "control": [
+    {
+      "event": "enable_record",
+      "kb_key": "m"
+    },
+    {
+      "event": "stop",
+      "kb_key": " "
+    },
+    {
+      "event": "start",
+      "kb_key": "8"
+    },
+    {
+      "event": "Trot",
+      "kb_key": "7"
+    },
+    {
+      "event": "UpOrDown",
+      "kb_key": "t"
+    },
+    {
+      "event": "Run",
+      "kb_key": "5"
+    },
+    {
+      "event": "leftMove",
+      "kb_key": "q"
+    },
+    {
+      "event": "rightMove",
+      "kb_key": "e"
+    },
+    {
+      "event": "forwardMove",
+      "kb_key": "w"
+    },
+    {
+      "event": "backMove",
+      "kb_key": "b"
+    },
+    {
+      "event": "leftRotate",
+      "kb_key": "a"
+    },
+    {
+      "event": "rightRotate",
+      "kb_key": "d"
+    },
+    {
+      "event": "UpMove",
+      "kb_key": "i"
+    },
+    {
+      "event": "DownMove",
+      "kb_key": "k"
+    },
+    {
+      "event": "fMove",
+      "kb_key": "o"
+    },
+    {
+      "event": "bMove",
+      "kb_key": "l"
+    },
+    {
+      "event": "zeros",
+      "kb_key": "s"
+    },
+    {
+      "event": "LMove",
+      "kb_key": "h"
+    },
+    {
+      "event": "RMove",
+      "kb_key": "j"
+    },
+    {
+      "event": "stand",
+      "kb_key": "p"
+    },
+    {
+      "event": "planning",
+      "kb_key": "z"
+    }
+  ]
+}

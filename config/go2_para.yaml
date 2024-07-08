@@ -1,0 +1,148 @@
+Robot_name: go2
+
+isSaveLog: true #是否记录数据，记录的数据使用scripts文件夹中的pyside6test.py画图
+
+physical_paras:
+  BodyMass: 15
+  Robot_mass: 15 #质量
+  Object_mass: 1 #物体质量
+  BodyLength: 0.3868 #身长
+  BodyWidth: 0.093 #身宽
+  Abd_offset: 0.0885 #外摆关节到髋关节偏置
+  Thigh_Length: 0.213 #大腿长度
+  Calf_Length: 0.213 #小腿长度
+  friction_coeff: 0.7 #摩擦系数
+  grav: -9.8 #重力加速度
+
+  Inertia_coeff: [0.02448, 0.098077, 0.107] #身体惯性矩阵，主对角线
+  Inertia_coeff_object: [0.0045, 0.0045, 0.0045] #身体惯性矩阵，主对角线，待确定
+
+f_min: 10 #z方向足端力下限
+f_max: 300 #z方向足端力上限
+
+Robot_controller_switch: 1  #控制器选择：1，VMC；2，MPC；3，NMPC; 4, NMPC_DRBM 5, NMPC_rpy 6, NMPC_DRBM_RPY
+Controllers_isEnable: #控制器计算使能
+  vmcEnable: true
+  mpcEnable: false
+  nmpcEnable: false
+  nmpcDRBMEnable: false
+  nmpcrpyEnable: false
+  nmpcDRBMrpyEnable: false
+
+StateEstimator:
+  CoMoffset: [-0.0, 0, 0] #如果实际重心靠后，程序规定重心就应该靠前，也就是此处与实际重心相反，如果搞不明白，可以试验就知道了
+  Q: [1e-3, 1e-4, 1e-4, 1e-4, 1e-4, 1e-3, 1e-4, 1e-4, 1e-4] #测量误差协方差
+  R: [0.1, 0.5, 0.5, 0.5, 0.5, 0.1, 0.5, 0.5, 0.5] #预测误差协方差
+  LegForce_estimate_method: 0 # 0:力传感器  1:外部力估计:配合动力学使用
+
+TrajectoryGenerator:
+  SwingLegOffset: [0.01, 0.05, 0]
+  k_p: [1000, 1000, 1000] #质心位置系数矩阵
+  k_v: [100, 100, 100] #质心速度系数矩阵
+  k_theta: [2000, 2000, 1000] #质心姿态系数矩阵
+  k_w: [400, 400, 30] #质心角速度系数矩阵
+
+  # k_p: [6000, 5000, 5000] #质心位置系数矩阵
+  # k_v: [600, 500, 500] #质心速度系数矩阵
+  # k_theta: [5000, 4000, 3000] #质心姿态系数矩阵
+  # k_w: [500, 400, 300] #质心角速度系数矩阵
+
+Object:
+  object_mass: 0.8
+  k_p: [500, 500, 500] #质心位置系数矩阵
+  k_v: [50, 50, 50] #质心速度系数矩阵
+  # k_v: [0, 0, 0] #质心速度系数矩阵
+  # k_theta: [0, 0, 0] #质心姿态系数矩阵   //此处放弃对姿态控制，追求对object的位置的控制
+  # k_w: [0, 0, 0] #质心角速度系数矩阵
+  k_theta: [250, 250, 500] #质心姿态系数矩阵
+  # k_theta: [25, 25, 50] #质心姿态系数矩阵
+  # k_w: [2.5, 2.5, 5] #质心角速度系数矩阵
+  # k_theta: [0, 0, 0] #质心姿态系数矩阵
+  k_w: [0, 0, 0] #质心角速度系数矩阵，此处微分项过大会带来震荡问题，暂时给0
+
+VMC:
+  S_track: [0.7, 1.5, 2.0, 2.0, 1.5, 0.85] #质心虚拟力跟随权重，相对于alpha_W越大，质心跟随越好
+  alpha_W: 1e-3 #足端力最小化权重
+  S_min_f: [1, 1, 1] #足端力各方向权重
+
+SwingLegController:
+  k_p_toe: [1000, 500, 1000] #足端位置系数矩阵
+  k_v_toe: [100, 50, 100] #足端速度系数矩阵
+
+MPC: #以下参数基本能用
+  mpc_discrete_switch: 1 #离散化方法选择 1 2
+  Q_qp: [500, 2000, 100, 1000, 2000, 300, 1, 2, 1, 10, 60, 10, 0] #Q,p,w,v,g(2) 
+  # Q_qp: [10, 8, 10, 30, 20, 30, 0.0, 0.00, 0.0, 0, 0, 0, 0] #Q,p,w,v,g(2)
+  weight_f: 1e-6 #最小化力的权重
+  R_qp: [100, 100, 1] #足端力各方向权重
+  #备注：1.mpc滚动计算的时间根据计算机的不同而需要变化，因此单步时间应该是受到计算机、预测步数等的影响
+  #2.机器人运动高速下姿态角会有偏置主要是微分项过大导致
+
+NMPC:
+  W_p: [15, 20, 50] #位置权重x,y,z
+  W_q: [50, 80, 80, 80] #四元数权重,roll,pitch,yaw,1
+  W_v: [1, 1, 5] #速度权重,vx,vy,vz
+  W_w: [1, 2, 1] #角速度权重,wx,wy,wz
+  # W_p: [20, 20, 60] #位置权重x,y,z
+  # W_q: [40, 100, 40, 1] #四元数权重,roll,pitch,yaw,1
+  # W_v: [0.2, 0.2, 0.6] #速度权重,vx,vy,vz
+  # W_w: [0.5, 0.1, 0.4] #角速度权重,wx,wy,wz
+  min_friction: 1e-5 #最小化力的权重
+  max_iter: 50 #最大迭代次数
+  isrecompile: true #是否重新编译，参数调整好后可改为false
+
+NMPC_rpy:
+  W_p: [30, 40, 60] #位置权重x,y,zW
+  W_q: [400, 600, 500] #四元数权重,roll,pitch,yaw,1
+  W_v: [3, 4, 8] #速度权重,vx,vy,vz
+  W_w: [4, 6, 5] #角速度权重,wx,wy,wz
+  W_f: [2, 2, 1.5]
+  min_friction: 1e-5 #最小化力的权重
+  max_iter: 50 #最大迭代次数
+  isrecompile: true #是否重新编译，参数调整好后可改为false
+
+NMPC_D_rpy:
+  W_p: [30, 50, 80] #位置权重x,y,zW
+  W_q: [50, 100, 80] #欧拉角权重,roll,pitch,yaw
+  W_v: [3, 4, 10] #速度权重,vx,vy,vz
+  W_w: [1, 1, 1] #角速度权重,wx,wy,wz
+  # W_v: [0, 0, 0] #速度权重,vx,vy,vz
+  # W_w: [0, 0, 0] #角速度权重,wx,wy,wz
+  min_friction: 1e-5 #最小化力的权重
+  W_p_object: [10, 10, 20] #位置权重x,y,z
+  W_q_object: [5, 10, 10] #欧拉角权重,roll,pitch,yaw
+  W_v_object: [0.1, 0.1, 0.1] #速度权重,vx,vy,vz
+  W_w_object: [0.1, 0.1, 0.1] #角速度权重,wx,wy,wz
+  # W_v_object: [0.00, 0.00, 0.00] #速度权重,vx,vy,vz
+  # W_w_object: [0.00, 0.00, 0.00] #角速度权重,wx,wy,wz
+  object_min_friction: 1e-5
+  max_iter: 20 #最大迭代次数
+  isrecompile: true #是否重新编译，参数调整好后可改为false
+
+NMPC_D:
+  W_p: [15, 20, 50] #位置权重x,y,z
+  W_q: [50, 80, 80, 80] #四元数权重,roll,pitch,yaw,1
+  W_v: [1, 1, 5] #速度权重,vx,vy,vz
+  W_w: [1, 2, 1] #角速度权重,wx,wy,wz
+  W_p_object: [6, 6, 6] #位置权重x,y,z
+  W_q_object: [6, 6, 4.5, 3] #四元数权重,roll,pitch,yaw,1
+  W_v_object: [0.1, 0.1, 0.1] #速度权重,vx,vy,vz
+  W_w_object: [0.1, 0.1, 0.1] #角速度权重,wx,wy,wz
+  min_friction: 1e-5 #最小化力的权重
+  max_iter: 100 #最大迭代次数
+  isrecompile: true #是否重新编译，参数调整好后可改为false
+
+WBC:
+  ratio: 0.001 #对控制器（vmc,mpc,nmpc）的信任和对全身控制信任的比例
+  method: 0  #  0:松弛优化 1:分层控制
+
+Dynamic:
+  isUseDynamic: false #是否使用动力学
+  k_p_joint: [100, 30, 30] #关节比例系数
+  k_v_joint: [1, 1, 1] #关节微分系数
+  k_p_joint_arm: [100, 100, 100, 100, 100, 100] #关节比例系数
+  # k_v_joint_arm: [10, 10, 10, 10, 10, 10] #关节微分系数
+  k_v_joint_arm: [1, 1, 1, 1, 1, 1] #关节微分系数,之前10的参数会让机械臂震荡
+
+Info:
+  isPrintOutInfo: false #是否打印

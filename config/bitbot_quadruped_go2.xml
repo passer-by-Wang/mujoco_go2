@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bitbot>
+  <logger path="../log"/>
+  
+  <backend port="12888" settings_file="./backend.json"/>
+
+  <mujoco file="../models/go2/mujoco/go2.xml"/>
+  
+  <bus>
+    <device id="1" type="MujocoJoint" name="FR_hip_joint"
+            mode="torque" initial_pos='5'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="2" type="MujocoJoint" name="FR_thigh_joint"
+            mode="torque" initial_pos='-75'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="3" type="MujocoJoint" name="FR_calf_joint"
+            mode="torque" initial_pos='150'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    /> 
+    <device id="4" type="MujocoJoint" name="RR_hip_joint"
+            mode="torque" initial_pos='5'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="5" type="MujocoJoint" name="RR_thigh_joint"
+            mode="torque" initial_pos='-75'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="6" type="MujocoJoint" name="RR_calf_joint"
+            mode="torque" initial_pos='150'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="7" type="MujocoJoint" name="FL_hip_joint"
+            mode="torque" initial_pos='-5'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="8" type="MujocoJoint" name="FL_thigh_joint"
+            mode="torque" initial_pos='-75'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="9" type="MujocoJoint" name="FL_calf_joint"
+            mode="torque" initial_pos='150'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="10" type="MujocoJoint" name="RL_hip_joint"
+            mode="torque" initial_pos='-5'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />
+    <device id="11" type="MujocoJoint" name="RL_thigh_joint"
+            mode="torque" initial_pos='-75'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />           
+    <device id="12" type="MujocoJoint" name="RL_calf_joint"
+            mode="torque" initial_pos='150'
+            pos_kp='28000' pos_kd='50' pos_ki='0' vel_kp='10' vel_kd='0'
+    />    
+    <device id="13" type="MujocoForceSensor" name="FR_forcesensor"
+            force="FR_forcesensor" 
+    />
+    <device id="14" type="MujocoForceSensor" name="RR_forcesensor"
+            force="RR_forcesensor" 
+    />
+    <device id="15" type="MujocoForceSensor" name="FL_forcesensor"
+            force="FL_forcesensor" 
+    />
+    <device id="16" type="MujocoForceSensor" name="RL_forcesensor"
+            force="RL_forcesensor" 
+    />
+    <device id="17" type="MujocoImu" name="imu"
+            site="site_imu" acc="imu_acc" gyro="imu_gyro"
+    />
+  </bus>
+</bitbot>

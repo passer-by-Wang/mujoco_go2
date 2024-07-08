@@ -1,0 +1,170 @@
+<mujoco model="go2_description">
+    <compiler angle="radian" meshdir="../meshes/" autolimits="true"/>
+  <!-- <statistic meansize="0.230664" extent="1.20751" center="0.00171833 6.55118e-07 -0.164097"/> -->
+    <option timestep="0.001" integrator="RK4">
+		<flag sensornoise="enable" />
+	</option>
+    <visual>
+        <map force="0.1" zfar="30"/>
+        <rgba haze="0.15 0.25 0.35 1"/>
+        <global offwidth="2560" offheight="1440" elevation="-20" azimuth="120"/>
+    </visual>
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1=".3 .5 .7" rgb2="0 0 0" width="32" height="512"/>
+        <texture name="body" type="cube" builtin="flat" mark="cross" width="127" height="1278" rgb1="0.8 0.6 0.4" rgb2="0.8 0.6 0.4" markrgb="1 1 1" random="0.01"/>
+        <material name="body" texture="body" texuniform="true" rgba="0.8 0.6 .4 1"/>
+        <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4"/>
+        <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
+      </asset>
+    <asset>
+        <mesh name="base" file="base.stl" />
+        <mesh name="hip" file="hip.stl" />
+        <mesh name="thigh" file="thigh.stl" />
+        <mesh name="calf" file="calf.stl" />
+        <mesh name="foot" file="foot.stl" />
+        <mesh name="thigh_mirror" file="thigh_mirror.stl" />
+        <mesh name="calf_mirror" file="calf_mirror.stl" />
+    </asset>
+    <worldbody>
+        <light diffuse=".7 .7 .7" mode="trackcom" pos="0 0 10" dir="0 0 -1"/>
+    <!-- <camera name="trackingCamera1" pos="3 0 0" fovy="50"/> -->
+ 	<geom name="floor" type="plane" size="0 0 0.5" friction="1.0 0.005 0.0001" material="grid"/>
+        <body name="base" pos="0 0 0.145">
+            <inertial pos="0.0211894 0 -0.00537167" quat="-0.000544412 0.71347 -0.00173648 0.700684" mass="6.923" diaginertia="0.0244752 0.098243 0.10719" />
+            <joint name="floating_base_joint" type="free" />
+            <geom type="mesh" quat=" 0.707  0.707 0 0" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="base" />
+            <geom type="mesh" quat=" 0.707  0.707 0 0" mesh="base" />
+            <site name = "site_imu" pos = "0 0 0"/>
+
+            <body name="FL_hip" pos="0.1934 0.0465 0">
+                <inertial pos="-0.0054 0.00194 -0.000105" quat="0.497014 0.499245 0.505462 0.498237" mass="0.678" diaginertia="0.00088403 0.000596003 0.000479967" />
+                <joint name="FL_hip_joint" pos="0 0 0" axis="1 0 0" />
+                <geom type="mesh" quat=" 0.707  0.707 0 0" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="hip" />
+                <geom type="mesh" quat=" 0.707  0.707 0 0" mesh="hip" />
+                
+                <body name="FL_thigh" pos="0 0.0955 0">
+                    <inertial pos="-0.00374 -0.0223 -0.0327" quat="0.829533 0.0847635 -0.0200632 0.551623" mass="1.152" diaginertia="0.00594973 0.00584149 0.000878787" />
+                    <joint name="FL_thigh_joint" pos="0 0 0" axis="0 -1 0"/>
+                    <geom type="mesh" quat=" 0.707  0.707 0 0" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="thigh" />
+                    <geom type="mesh" quat=" 0.707  0.707 0 0" mesh="thigh" />
+                    
+                    <body name="FL_calf" pos="0 0 -0.213">
+                        <inertial pos="0.00629595 -0.000622121 -0.141417" quat="0.710672 0.00154099 -0.00450087 0.703508" mass="0.241352" diaginertia="0.0014901 0.00146356 5.31397e-05" />
+                        <joint name="FL_calf_joint" pos="0 0 0" axis="0 -1 0"/>
+                        <geom quat=" 0.707  0.707 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="calf" />
+                        <geom quat=" 0.707  0.707 0 0" type="mesh" mesh="calf" />
+                        <geom pos="0 0 -0.213" quat=" 0.707  0.707 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="foot" />
+                        <geom pos="0 0 -0.213" quat=" 0.707  0.707 0 0" friction="0.9 0.005 0.0001" mesh="foot" />
+                        <site name = "FL_site_forcesensor" pos = "0 0 -0.213"/>
+                    </body>
+                </body>
+            </body>
+
+            <body name="FR_hip" pos="0.1934 -0.0465 0">
+                <inertial pos="-0.0054 -0.00194 -0.000105" quat="0.498237 0.505462 0.499245 0.497014" mass="0.678" diaginertia="0.00088403 0.000596003 0.000479967" />
+                <joint name="FR_hip_joint" pos="0 0 0" axis="1 0 0"/>
+                <geom quat=" 0.707  -0.707 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="hip" />
+                <geom quat=" 0.707  -0.707 0 0" type="mesh" mesh="hip" />
+                
+                <body name="FR_thigh" pos="0 -0.0955 0">
+                    <inertial pos="-0.00374 0.0223 -0.0327" quat="0.551623 -0.0200632 0.0847635 0.829533" mass="1.152" diaginertia="0.00594973 0.00584149 0.000878787" />
+                    <joint name="FR_thigh_joint" pos="0 0 0" axis="0 -1 0"/>
+                    <geom type="mesh" quat=" 0.707  0.707 0 0" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="thigh_mirror" />
+                    <geom type="mesh" quat=" 0.707  0.707 0 0" mesh="thigh_mirror" />
+                    
+                    <body name="FR_calf" pos="0 0 -0.213">
+                        <inertial pos="0.00629595 0.000622121 -0.141417" quat="0.703508 -0.00450087 0.00154099 0.710672" mass="0.241352" diaginertia="0.0014901 0.00146356 5.31397e-05" />
+                        <joint name="FR_calf_joint" pos="0 0 0" axis="0 -1 0"/>
+                        <geom type="mesh" quat=" 0.707  0.707 0 0" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="calf_mirror" />
+                        <geom type="mesh" quat=" 0.707  0.707 0 0" mesh="calf_mirror" />
+                        <geom pos="0 0 -0.213" quat=" 0.707  0.707 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="foot" />
+                        <geom pos="0 0 -0.213" quat=" 0.707  0.707 0 0" friction="0.9 0.005 0.0001" mesh="foot" />
+                        <site name = "FR_site_forcesensor" pos = "0 0 -0.213"/>
+                    </body>
+                </body>
+            </body>
+
+            <body name="RL_hip" pos="-0.1934 0.0465 0">
+                <inertial pos="0.0054 0.00194 -0.000105" quat="0.505462 0.498237 0.497014 0.499245" mass="0.678" diaginertia="0.00088403 0.000596003 0.000479967" />
+                <joint name="RL_hip_joint" pos="0 0 0" axis="1 0 0"/>
+                <geom quat=" 0 0 -0.707 0.707" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="hip" />
+                <geom quat=" 0 0 -0.707 0.707" type="mesh" mesh="hip" />
+                
+                <body name="RL_thigh" pos="0 0.0955 0">
+                    <inertial pos="-0.00374 -0.0223 -0.0327" quat="0.829533 0.0847635 -0.0200632 0.551623" mass="1.152" diaginertia="0.00594973 0.00584149 0.000878787" />
+                    <joint name="RL_thigh_joint" pos="0 0 0" axis="0 -1 0"/>
+                    <geom type="mesh" quat=" 0.707  0.707 0 0" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="thigh" />
+                    <geom type="mesh" quat=" 0.707  0.707 0 0" mesh="thigh" />
+                    
+                    <body name="RL_calf" pos="0 0 -0.213">
+                        <inertial pos="0.00629595 -0.000622121 -0.141417" quat="0.710672 0.00154099 -0.00450087 0.703508" mass="0.241352" diaginertia="0.0014901 0.00146356 5.31397e-05" />
+                        <joint name="RL_calf_joint" pos="0 0 0" axis="0 -1 0"/>
+                        <geom type="mesh" quat=" 0.707  0.707 0 0"  contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="calf" />
+                        <geom type="mesh" quat=" 0.707  0.707 0 0"  mesh="calf" />
+                        <geom pos="0 0 -0.213" quat=" 0.707  0.707 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="foot" />
+                        <geom pos="0 0 -0.213" quat=" 0.707  0.707 0 0" friction="0.9 0.005 0.0001" type="mesh" mesh="foot" />
+                        <site name = "RL_site_forcesensor" pos = "0 0 -0.213"/>
+                    </body>
+                </body>
+            </body>
+
+            <body name="RR_hip" pos="-0.1934 -0.0465 0">
+                <inertial pos="0.0054 -0.00194 -0.000105" quat="0.499245 0.497014 0.498237 0.505462" mass="0.678" diaginertia="0.00088403 0.000596003 0.000479967" />
+                <joint name="RR_hip_joint" pos="0 0 0" axis="1 0 0"/>
+                <geom quat="0 0 0.707 0.707" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="hip" />
+                <geom quat="0 0 0.707 0.707" type="mesh" mesh="hip" />
+                
+                <body name="RR_thigh" pos="0 -0.0955 0">
+                    <inertial pos="-0.00374 0.0223 -0.0327" quat="0.551623 -0.0200632 0.0847635 0.829533" mass="1.152" diaginertia="0.00594973 0.00584149 0.000878787" />
+                    <joint name="RR_thigh_joint" pos="0 0 0" axis="0 -1 0"/>
+                    <geom type="mesh" quat=" 0.707  0.707 0 0" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="thigh_mirror" />
+                    <geom type="mesh" quat=" 0.707  0.707 0 0" mesh="thigh_mirror" />
+                    
+                    <body name="RR_calf" pos="0 0 -0.213">
+                        <inertial pos="0.00629595 0.000622121 -0.141417" quat="0.703508 -0.00450087 0.00154099 0.710672" mass="0.241352" diaginertia="0.0014901 0.00146356 5.31397e-05" />
+                        <joint name="RR_calf_joint" pos="0 0 0" axis="0 -1 0"/>
+                        <geom type="mesh" quat=" 0.707  0.707 0 0" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="calf_mirror" />
+                        <geom type="mesh" quat=" 0.707  0.707 0 0" mesh="calf_mirror" />
+                        <geom pos="0 0 -0.213" quat=" 0.707  0.707 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="foot" />
+                        <geom pos="0 0 -0.213" quat=" 0.707  0.707 0 0" type="mesh" friction="0.9 0.005 0.0001" mesh="foot" />
+                        <site name = "RR_site_forcesensor" pos = "0 0 -0.213"/>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <actuator>
+		<motor name="FR_hip_joint" joint="FR_hip_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+		<motor name="RR_hip_joint" joint="RR_hip_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+		<motor name="FL_hip_joint" joint="FL_hip_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+		<motor name="RL_hip_joint" joint="RL_hip_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+
+		<motor name="FR_thigh_joint" joint="FR_thigh_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+		<motor name="RR_thigh_joint" joint="RR_thigh_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />        
+		<motor name="FL_thigh_joint" joint="FL_thigh_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+		<motor name="RL_thigh_joint" joint="RL_thigh_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+
+        <motor name="FR_calf_joint" joint="FR_calf_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+		<motor name="RR_calf_joint" joint="RR_calf_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+        <motor name="FL_calf_joint" joint="FL_calf_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+		<motor name="RL_calf_joint" joint="RL_calf_joint" gear="1" ctrllimited="true" ctrlrange="-180 180" />
+    </actuator>
+
+    <sensor>
+		<force name = "FL_forcesensor" site = "FL_site_forcesensor" cutoff = "5000.0"/>
+  	    <force name = "FR_forcesensor" site = "FR_site_forcesensor" cutoff = "5000.0"/>
+		<force name = "RL_forcesensor" site = "RL_site_forcesensor" cutoff = "5000.0"/>
+		<force name = "RR_forcesensor" site = "RR_site_forcesensor" cutoff = "5000.0"/>
+
+        <accelerometer name = "imu_acc" site = "site_imu"/>
+        <gyro name = "imu_gyro" site = "site_imu"/>
+    </sensor>
+
+  <contact>
+    <exclude body1 = "base" body2 = "FR_hip"/>
+    <exclude body1 = "base" body2 = "RR_hip"/>
+    <exclude body1 = "base" body2 = "FL_hip"/>
+    <exclude body1 = "base" body2 = "RL_hip"/>
+  </contact>
+</mujoco>
